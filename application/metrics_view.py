@@ -8,7 +8,7 @@ views = Blueprint('views', __name__, url_prefix='/')
 @views.route('/metrics', methods=['GET'])
 def get_metrics_api():
     try:
-        fields = request.args.get('field')
+        fields = request.args.get('fields')
         operation = request.args.get('operation')
         date_from = request.args.get('date_from')
         channel = request.args.get('channel')
