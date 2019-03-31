@@ -1,0 +1,11 @@
+version: '3'
+services:
+  test:
+    build: .
+    command: python ./test/run_all_test.py
+  application:
+    env_file: variables.env
+    build: .
+    command: uwsgi --http 0.0.0.0:5000 --wsgi-file run.py --callable app_dispatch
+    ports:
+    - "5000:5000"
