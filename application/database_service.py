@@ -3,11 +3,23 @@ from datetime import datetime
 from application.metrics_model import Metrics
 from application import db
 
+SUM = 'sum'
+OS = 'os'
+COUNTRY = 'country'
+CHANNEL = 'channel'
+DATE = 'date'
+CPI = 'cpi'
+REVENUE = 'revenue'
+SPEND = 'spend'
+INSTALLS = 'installs'
+CLICKS = 'clicks'
+IMPRESSIONS = 'impressions'
+
 
 def get_result(fields, operation, date_from, date_to, group_by, sort_by, direction, channel, os, country):
     selected_fields_tmp = select_fields(fields)
 
-    if operation and operation == 'sum':
+    if operation and operation == SUM:
         selected_fields = [func.sum(field) for field in selected_fields_tmp]
     else:
         selected_fields = selected_fields_tmp
@@ -56,17 +68,17 @@ def select_fields(fields):
     selected_fields = []
     missing_fields = []
     for field in list(set(fields.split(','))):
-        if field == 'impressions':
+        if field == IMPRESSIONS:
             selected_fields.append(Metrics.impressions)
-        elif field == 'clicks':
+        elif field == CLICKS:
             selected_fields.append(Metrics.clicks)
-        elif field == 'installs':
+        elif field == INSTALLS:
             selected_fields.append(Metrics.installs)
-        elif field == 'spend':
+        elif field == SPEND:
             selected_fields.append(Metrics.spend)
-        elif field == 'revenue':
+        elif field == REVENUE:
             selected_fields.append(Metrics.revenue)
-        elif field == 'cpi':
+        elif field == CPI:
             selected_fields.append(Metrics.cpi)
         else:
             missing_fields.append(field)
@@ -81,13 +93,13 @@ def select_group_by_fields(fields):
     missing_fields = []
     selected_fields = []
     for field in list(set(fields.split(','))):
-        if field == 'date':
+        if field == DATE:
             selected_fields.append(Metrics.date)
-        elif field == 'channel':
+        elif field == CHANNEL:
             selected_fields.append(Metrics.channel)
-        elif field == 'country':
+        elif field == COUNTRY:
             selected_fields.append(Metrics.country)
-        elif field == 'os':
+        elif field == OS:
             selected_fields.append(Metrics.os)
         else:
             missing_fields.append(field)
@@ -99,25 +111,25 @@ def select_group_by_fields(fields):
 def get_sort_by_field(sort_by):
     if not sort_by:
         return None
-    if sort_by == 'date':
+    if sort_by == DATE:
         return Metrics.date
-    elif sort_by == 'channel':
+    elif sort_by == CHANNEL:
         return Metrics.channel
-    elif sort_by == 'country':
+    elif sort_by == COUNTRY:
         return Metrics.country
-    elif sort_by == 'os':
+    elif sort_by == OS:
         return Metrics.os
-    elif sort_by == 'revenue':
+    elif sort_by == REVENUE:
         return Metrics.revenue
-    elif sort_by == 'spend':
+    elif sort_by == SPEND:
         return Metrics.spend
-    elif sort_by == 'installs':
+    elif sort_by == INSTALLS:
         return Metrics.installs
-    elif sort_by == 'clicks':
+    elif sort_by == CLICKS:
         return Metrics.clicks
-    elif sort_by == 'impressions':
+    elif sort_by == IMPRESSIONS:
         return Metrics.impressions
-    elif sort_by == 'cpi':
+    elif sort_by == CPI:
         return Metrics.cpi
     else:
         raise ValueError('%s in not a known field ' % sort_by)
