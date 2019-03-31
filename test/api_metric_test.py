@@ -14,6 +14,9 @@ class ApiMetricTestCase(unittest.TestCase):
         rv = self.client().get('/metrics')
         self.assertEqual(rv.status_code, 200)
 
+    def test_get_metrics_wrong_field(self):
+        rv = self.client().get('/metrics?field=wrong')
+        self.assertEqual(rv.status_code, 400)
 
 
 if __name__ == "__main__":
