@@ -25,11 +25,13 @@ def get_result(fields, operation, date_from, date_to, group_by, sort_by, directi
         selected_fields = selected_fields_tmp
 
     selected_group_by_fields = select_group_by_fields(group_by)
+
     if selected_group_by_fields:
         # if there is group by fields then we add thoses fields to the SELECT fields
         selected_fields.extend(selected_group_by_fields)
 
     query = db.session.query(*selected_fields)
+
     if selected_group_by_fields:
         query = query.group_by(*selected_group_by_fields)
 
@@ -54,12 +56,16 @@ def get_result(fields, operation, date_from, date_to, group_by, sort_by, directi
         query = query.order_by(direction_func(sort_by_field))
 
     results = []
-    label_fields = [str(field_label).replace('Metrics.', '').replace('(', '_').replace(')', '').lower() for field_label
-                    in
-                    selected_fields]
+    label_fields = get_label_fields(selected_fields)
     for res in query.all():
         results.append(dict(zip(label_fields, list(res))))
     return {'results': results}
+
+
+def get_label_fields(selected_fields):
+    return [str(field_label).replace('Metrics.', '').replace('(', '_').replace(')', '').lower() for field_label
+            in
+            selected_fields]
 
 
 def select_fields(fields):
